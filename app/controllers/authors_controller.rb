@@ -4,12 +4,18 @@ class AuthorsController < ApplicationController
   end
 
   def new
+    @author = Author.new
   end
 
   def create
-    @author = Author.create!(author_params)
-
-    redirect_to author_path(@author)
+    @author = Author.new(author_params)
+    if @author.save
+      flash[:message] = "Author successfully created!"
+      redirect_to author_path(@author)
+    else 
+      flash.now[:message] = @author.errors.full_messages[0]
+      render :new 
+    end 
   end
 
   private
